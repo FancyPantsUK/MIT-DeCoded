@@ -10,6 +10,9 @@ import DivergenceView from './components/DivergenceView';
 import HeatmapView from './components/HeatmapView';
 import SeasonsView from './components/SeasonsView';
 import LockedView from './components/LockedView';
+import SensitivitySandbox from './components/SensitivitySandbox';
+import AdminControlPanel from './components/AdminControlPanel';
+import DataSourceLayer from './components/DataSourceLayer';
 import { SCENARIOS, TABS } from './data/scenarios';
 import { canAccess, getInitialTier } from './utils/access';
 import './styles.css';
@@ -129,6 +132,23 @@ export default function App() {
               onApply={handleApply}
               onReset={handleReset}
             />
+
+            {/* Tier-gated vision panels — appear below tab content on relevant tabs */}
+            {activeTab === 'heatmap' && canAccess(userTier, 'sandbox') && (
+              <div className="vision-panels">
+                <SensitivitySandbox />
+              </div>
+            )}
+            {activeTab === 'compress' && canAccess(userTier, 'pro') && (
+              <div className="vision-panels">
+                <DataSourceLayer />
+              </div>
+            )}
+            {activeTab === 'compress' && canAccess(userTier, 'admin') && (
+              <div className="vision-panels">
+                <AdminControlPanel />
+              </div>
+            )}
           </motion.div>
         </AnimatePresence>
       </main>

@@ -3023,3 +3023,863 @@ body {
 .dg-dir-change .negative { color: rgba(239, 68, 68, 0.7); }
 .dg-dir-change .bearish { color: var(--red); }
 
+/* ═══════════════════════════════════════════════
+   ELECTRIC TRACE SYSTEM
+   Adapted from MITBRAIN halo/glow shader patterns.
+   Spinning ring trace + fresnel edge glow in CSS.
+   ═══════════════════════════════════════════════ */
+
+/* ── Electric trace card — animated border sweep ── */
+.electric-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.electric-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--trace-angle, 0deg),
+    transparent 0%,
+    transparent 70%,
+    var(--trace-color, rgba(56, 189, 248, 0.5)) 80%,
+    var(--trace-color-bright, rgba(56, 189, 248, 0.8)) 85%,
+    transparent 95%,
+    transparent 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: electric-spin 4s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.electric-card::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: transparent;
+  box-shadow:
+    inset 0 0 12px rgba(56, 189, 248, 0.06),
+    0 0 15px rgba(56, 189, 248, 0.04);
+  pointer-events: none;
+  z-index: 0;
+  transition: box-shadow 0.3s ease;
+}
+
+.electric-card:hover::after {
+  box-shadow:
+    inset 0 0 18px rgba(56, 189, 248, 0.1),
+    0 0 25px rgba(56, 189, 248, 0.06);
+}
+
+@keyframes electric-spin {
+  to { --trace-angle: 360deg; }
+}
+
+@property --trace-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* ── Electric trace variants ── */
+
+/* Amber trace for verdict/premium cards */
+.electric-card-amber {
+  --trace-color: rgba(245, 158, 11, 0.4);
+  --trace-color-bright: rgba(245, 158, 11, 0.7);
+}
+
+.electric-card-amber::after {
+  box-shadow:
+    inset 0 0 12px rgba(245, 158, 11, 0.05),
+    0 0 15px rgba(245, 158, 11, 0.03);
+}
+
+.electric-card-amber:hover::after {
+  box-shadow:
+    inset 0 0 18px rgba(245, 158, 11, 0.08),
+    0 0 25px rgba(245, 158, 11, 0.05);
+}
+
+/* Green trace for resolved state */
+.electric-card-green {
+  --trace-color: rgba(34, 197, 94, 0.4);
+  --trace-color-bright: rgba(34, 197, 94, 0.7);
+}
+
+.electric-card-green::after {
+  box-shadow:
+    inset 0 0 12px rgba(34, 197, 94, 0.05),
+    0 0 15px rgba(34, 197, 94, 0.03);
+}
+
+/* Purple trace for sandbox */
+.electric-card-purple {
+  --trace-color: rgba(168, 85, 247, 0.4);
+  --trace-color-bright: rgba(168, 85, 247, 0.7);
+}
+
+.electric-card-purple::after {
+  box-shadow:
+    inset 0 0 12px rgba(168, 85, 247, 0.05),
+    0 0 15px rgba(168, 85, 247, 0.03);
+}
+
+/* Red trace for admin */
+.electric-card-red {
+  --trace-color: rgba(239, 68, 68, 0.35);
+  --trace-color-bright: rgba(239, 68, 68, 0.6);
+}
+
+.electric-card-red::after {
+  box-shadow:
+    inset 0 0 12px rgba(239, 68, 68, 0.04),
+    0 0 15px rgba(239, 68, 68, 0.03);
+}
+
+/* ── Fast spin variant for compress-active moments ── */
+.electric-card-fast::before {
+  animation-duration: 1.5s;
+}
+
+/* ── Electric pulse — brief intensify on update ── */
+@keyframes electric-pulse {
+  0% { filter: brightness(1); }
+  30% { filter: brightness(1.15); }
+  100% { filter: brightness(1); }
+}
+
+.electric-pulse {
+  animation: electric-pulse 0.6s ease-out;
+}
+
+/* ── Electric button (Recompress, etc.) ── */
+.electric-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.electric-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(56, 189, 248, 0.15),
+    transparent
+  );
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+
+.electric-btn:hover::after {
+  opacity: 1;
+  animation: electric-sweep 1.2s ease-in-out;
+}
+
+@keyframes electric-sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* ── Three.js core container ── */
+.three-core-container {
+  position: absolute;
+  inset: -20px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.three-core-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Make intel-core-container relative for Three.js overlay */
+.intel-core-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+/* CSS core sits above Three.js */
+.intel-core {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Apply electric trace to premium elements ── */
+
+/* Verdict hero card */
+.verdict-hero-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.verdict-hero-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--trace-angle, 0deg),
+    transparent 0%,
+    transparent 65%,
+    rgba(245, 158, 11, 0.5) 78%,
+    rgba(245, 158, 11, 0.8) 83%,
+    transparent 93%,
+    transparent 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: electric-spin 5s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Compress hero band — subtle teal edge */
+.compress-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.compress-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--trace-angle, 0deg),
+    transparent 0%,
+    transparent 75%,
+    rgba(56, 189, 248, 0.3) 82%,
+    rgba(56, 189, 248, 0.5) 86%,
+    transparent 94%,
+    transparent 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: electric-spin 6s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Active mode button glow */
+.mode-btn.active {
+  position: relative;
+  overflow: hidden;
+}
+
+.mode-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--amber), transparent);
+  animation: mode-glow 2s ease-in-out infinite;
+}
+
+@keyframes mode-glow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+/* Active scenario button electric edge */
+.scenario-btn.active {
+  position: relative;
+  overflow: hidden;
+}
+
+.scenario-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--teal), transparent);
+  animation: mode-glow 2.5s ease-in-out infinite;
+}
+
+/* Active nav tab underline glow */
+.nav-tab.active {
+  position: relative;
+}
+
+.nav-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--teal), transparent);
+  opacity: 0.6;
+}
+
+/* ── Locked card intentional styling ── */
+.locked-view {
+  position: relative;
+}
+
+.locked-view::before {
+  content: '';
+  position: absolute;
+  inset: 30% 20%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.04) 0%, transparent 70%);
+  animation: locked-breathe 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes locked-breathe {
+  0%, 100% { opacity: 0.3; transform: scale(0.9); }
+  50% { opacity: 0.6; transform: scale(1.05); }
+}
+
+.locked-badge {
+  position: relative;
+  overflow: hidden;
+}
+
+.locked-badge::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.15), transparent);
+  animation: locked-shimmer 3s ease-in-out infinite;
+}
+
+@keyframes locked-shimmer {
+  0% { left: -50%; }
+  100% { left: 150%; }
+}
+
+/* ── Bottom cards hover polish ── */
+.bottom-card {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s ease, border-color 0.25s ease;
+}
+
+.bottom-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.bottom-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--teal), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.bottom-card:hover::after {
+  opacity: 0.5;
+}
+
+/* ── Compress cards hover polish ── */
+.compress-card {
+  transition: all 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.compress-card:hover {
+  box-shadow: 0 2px 12px rgba(56, 189, 248, 0.06);
+  transform: translateY(-0.5px);
+}
+
+/* ── Signal chip electric glow during intake ── */
+.signal-chip {
+  transition: box-shadow 0.3s ease;
+}
+
+/* ── Core connector enhanced ── */
+.core-connector.active {
+  position: relative;
+}
+
+.core-connector.active::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 6px;
+  height: 100%;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse, rgba(56, 189, 248, 0.2) 0%, transparent 70%);
+  animation: connector-pulse 2s ease-in-out infinite;
+}
+
+@keyframes connector-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* ── Tier badge polish ── */
+.tier-badge {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.tier-badge::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+  animation: badge-shimmer 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes badge-shimmer {
+  0% { left: -40%; }
+  50% { left: 140%; }
+  100% { left: 140%; }
+}
+
+/* ── RV badge electric ring ── */
+.rv-badge {
+  position: relative;
+}
+
+.rv-badge::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  background: conic-gradient(
+    from var(--trace-angle, 0deg),
+    transparent 0%,
+    transparent 80%,
+    rgba(99, 102, 241, 0.5) 90%,
+    transparent 100%
+  ) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: electric-spin 3s linear infinite;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════
+   REDUCED MOTION — respect user preference
+   Disable heavy animations, keep subtle transitions
+   ═══════════════════════════════════════════════ */
+/* ── Vision Panels (tier-gated placeholder cards) ── */
+.vision-panels {
+  padding: 10px 0 8px;
+  max-width: 520px;
+}
+
+/* ── Sandbox Panel ── */
+.sandbox-panel {
+  background: var(--bg-card);
+  border: 1px solid rgba(168, 85, 247, 0.15);
+  border-radius: 10px;
+  padding: 14px 16px;
+  backdrop-filter: blur(12px);
+}
+
+.sandbox-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.sandbox-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sandbox-icon { color: #a855f7; }
+
+.sandbox-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #a855f7;
+}
+
+.sandbox-status-badge {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background: rgba(168, 85, 247, 0.12);
+  color: #a855f7;
+  border: 1px solid rgba(168, 85, 247, 0.25);
+}
+
+.sandbox-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+.sandbox-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+}
+
+.sandbox-control {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sandbox-control.disabled { opacity: 0.4; pointer-events: none; }
+
+.sandbox-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.sandbox-select {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.sandbox-slider-mock {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sandbox-slider-track {
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  position: relative;
+}
+
+.sandbox-slider-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(168, 85, 247, 0.3), #a855f7);
+  border-radius: 2px;
+}
+
+.sandbox-slider-thumb {
+  position: absolute;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  background: #a855f7;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 6px rgba(168, 85, 247, 0.5);
+}
+
+.sandbox-slider-value {
+  font-size: 11px;
+  font-weight: 700;
+  color: #a855f7;
+  font-variant-numeric: tabular-nums;
+  min-width: 30px;
+}
+
+.sandbox-reset {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 600;
+  cursor: not-allowed;
+  width: fit-content;
+}
+
+.sandbox-reset.disabled { opacity: 0.35; }
+
+.sandbox-lock-overlay {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(168, 85, 247, 0.1);
+  font-size: 10px;
+  color: rgba(168, 85, 247, 0.6);
+  letter-spacing: 0.5px;
+}
+
+/* ── Admin Panel ── */
+.admin-panel {
+  background: var(--bg-card);
+  border: 1px solid rgba(239, 68, 68, 0.15);
+  border-radius: 10px;
+  padding: 14px 16px;
+  backdrop-filter: blur(12px);
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.admin-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-icon { color: var(--red); }
+
+.admin-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--red);
+}
+
+.admin-version-badge {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--red);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.admin-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+.admin-features {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.admin-feature-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.admin-feature-row:hover {
+  background: rgba(239, 68, 68, 0.04);
+}
+
+.admin-feature-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-feature-icon { color: var(--text-muted); }
+
+.admin-feature-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-dim);
+}
+
+.admin-feature-status {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* ── Data Source Layer Panel ── */
+.datasource-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  backdrop-filter: blur(12px);
+}
+
+.datasource-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.datasource-icon { color: var(--teal); }
+
+.datasource-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--teal);
+}
+
+.datasource-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+.datasource-slots {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.datasource-slot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 8px;
+  border-radius: 5px;
+  transition: background 0.15s;
+}
+
+.datasource-slot:hover {
+  background: rgba(56, 189, 248, 0.04);
+}
+
+.datasource-slot-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.datasource-slot-icon { color: var(--text-muted); }
+
+.datasource-slot-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-dim);
+}
+
+.datasource-slot-status {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.datasource-slot-status.active {
+  color: var(--green);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .electric-card::before,
+  .verdict-hero-card::before,
+  .compress-hero::before,
+  .rv-badge::after {
+    animation: none;
+    opacity: 0.3;
+  }
+
+  .mode-btn.active::after,
+  .scenario-btn.active::after,
+  .nav-tab.active::after {
+    animation: none;
+    opacity: 0.5;
+  }
+
+  .locked-view::before {
+    animation: none;
+  }
+
+  .locked-badge::after,
+  .tier-badge::after {
+    animation: none;
+    display: none;
+  }
+
+  .connector-pulse {
+    animation: none;
+  }
+
+  .bottom-card:hover {
+    transform: none;
+  }
+
+  .compress-card:hover {
+    transform: none;
+  }
+
+  .three-core-container {
+    display: none;
+  }
+
+  .intel-ring {
+    animation-duration: 60s !important;
+  }
+
+  .intel-orb {
+    animation: none;
+  }
+
+  @keyframes status-pulse {
+    0%, 100% { opacity: 1; }
+  }
+}
+

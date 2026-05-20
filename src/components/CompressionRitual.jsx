@@ -1,7 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RotateCcw } from 'lucide-react';
 import { FACTORS } from '../data/scenarios';
+
+const ThreeIntelligenceCore = lazy(() => import('./ThreeIntelligenceCore'));
 
 const PHASES = {
   INTAKE: 'intake',
@@ -72,9 +74,49 @@ function CompressionStatus({ phase }) {
   );
 }
 
+function CSSFallbackCore({ phase, convictionScore }) {
+  return (
+    <div className={`intel-core ${phase === PHASES.COMPRESSING ? 'core-compressing' : ''} ${phase === PHASES.RESOLVED ? 'core-resolved' : ''}`}>
+      <div className="intel-ring ring-1" />
+      <div className="intel-ring ring-2" />
+      <div className="intel-ring ring-3" />
+      <div className={`intel-orb ${phase === PHASES.COMPRESSING ? 'orb-compressing' : ''}`}>
+        <AnimatePresence mode="wait">
+          {phase === PHASES.RESOLVED ? (
+            <motion.div
+              key="score"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+              style={{ textAlign: 'center' }}
+            >
+              <div className="intel-score">{convictionScore}</div>
+              <div className="intel-score-label">CONVICTION</div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="processing"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0.4, 1, 0.4] }}
+              transition={{ duration: 1.2, repeat: Infinity }}
+              style={{ textAlign: 'center' }}
+            >
+              <div className="intel-score-label" style={{ fontSize: '7px' }}>
+                {phase === PHASES.INTAKE ? 'READING' : 'COMPRESSING'}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+}
+
 export default function CompressionRitual({ scenarioFactors, convictionScore, children, onPhaseChange }) {
   const [phase, setPhase] = useState(PHASES.INTAKE);
   const [ritualKey, setRitualKey] = useState(0);
+  const [threeReady, setThreeReady] = useState(false);
+  const [threeFailed, setThreeFailed] = useState(false);
 
   const runRitual = useCallback(() => {
     setPhase(PHASES.INTAKE);
@@ -101,25 +143,31 @@ export default function CompressionRitual({ scenarioFactors, convictionScore, ch
     return cleanup;
   }, [ritualKey, runRitual]);
 
+  // Check if reduced motion is preferred
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (mq.matches) setThreeFailed(true);
+  }, []);
+
   const handleRecompress = () => {
     setRitualKey((k) => k + 1);
   };
 
+  const showThree = !threeFailed;
+
   return (
     <div className="ritual-container">
-      {/* Header with Recompress */}
       <div className="ritual-header">
         <div className="ritual-header-left">
           <div className="ritual-engine-label">DECISION COMPRESSION ENGINE</div>
           <CompressionStatus phase={phase} />
         </div>
-        <button className="recompress-btn" onClick={handleRecompress} title="Recompress">
+        <button className="recompress-btn electric-btn" onClick={handleRecompress} title="Recompress">
           <RotateCcw size={13} />
           <span>Recompress</span>
         </button>
       </div>
 
-      {/* Signal Chips - Phase 1 */}
       <div className="signal-chips-container">
         <AnimatePresence>
           {phase !== PHASES.RESOLVED && (
@@ -143,7 +191,6 @@ export default function CompressionRitual({ scenarioFactors, convictionScore, ch
         </AnimatePresence>
       </div>
 
-      {/* Intelligence Core Area - Phase 2 */}
       <div className="ritual-core-area">
         <motion.div
           className="intel-core-container"
@@ -158,39 +205,19 @@ export default function CompressionRitual({ scenarioFactors, convictionScore, ch
               : { duration: 0.4 }
           }
         >
-          <div className={`intel-core ${phase === PHASES.COMPRESSING ? 'core-compressing' : ''} ${phase === PHASES.RESOLVED ? 'core-resolved' : ''}`}>
-            <div className="intel-ring ring-1" />
-            <div className="intel-ring ring-2" />
-            <div className="intel-ring ring-3" />
-            <div className={`intel-orb ${phase === PHASES.COMPRESSING ? 'orb-compressing' : ''}`}>
-              <AnimatePresence mode="wait">
-                {phase === PHASES.RESOLVED ? (
-                  <motion.div
-                    key="score"
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.4, ease: 'easeOut' }}
-                    style={{ textAlign: 'center' }}
-                  >
-                    <div className="intel-score">{convictionScore}</div>
-                    <div className="intel-score-label">CONVICTION</div>
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="processing"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: [0.4, 1, 0.4] }}
-                    transition={{ duration: 1.2, repeat: Infinity }}
-                    style={{ textAlign: 'center' }}
-                  >
-                    <div className="intel-score-label" style={{ fontSize: '7px' }}>
-                      {phase === PHASES.INTAKE ? 'READING' : 'COMPRESSING'}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </div>
+          {/* Three.js layer behind CSS core */}
+          {showThree && (
+            <Suspense fallback={null}>
+              <ThreeIntelligenceCore
+                factors={scenarioFactors}
+                phase={phase}
+                convictionScore={convictionScore}
+              />
+            </Suspense>
+          )}
+
+          {/* CSS core overlaid — shows score/status, also fallback if Three fails */}
+          <CSSFallbackCore phase={phase} convictionScore={convictionScore} />
 
           <AnimatePresence mode="wait">
             <motion.p
@@ -209,7 +236,6 @@ export default function CompressionRitual({ scenarioFactors, convictionScore, ch
         </motion.div>
       </div>
 
-      {/* Verdict Content - Phase 3 */}
       <AnimatePresence>
         {phase === PHASES.RESOLVED && (
           <motion.div
