@@ -9,7 +9,7 @@ function CategoryCard({ category, index }) {
       className="category-card"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.08 }}
+      transition={{ delay: index * 0.06 }}
     >
       <div className="category-title">{category.label}</div>
       <div className="asset-list">
@@ -37,14 +37,23 @@ function CategoryCard({ category, index }) {
 }
 
 export default function DataGridView({ activeTab }) {
+  const title = activeTab === 'performance'
+    ? 'SCENARIO PERFORMANCE'
+    : 'GMI FACTOR RANKINGS';
+
   return (
     <motion.div
-      className="data-grid-view"
+      className="tab-view"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       key={activeTab}
     >
-      <div className="section-label">GMI FACTOR RANKINGS — {activeTab.toUpperCase()}</div>
+      <div className="section-label">{title}</div>
+      <p className="tab-subtitle">
+        {activeTab === 'performance'
+          ? 'Estimated performance by category under selected scenario'
+          : 'Current factor rankings across asset classes'}
+      </p>
       <div className="category-grid">
         {CATEGORIES.map((cat, i) => (
           <CategoryCard key={cat.id} category={cat} index={i} />

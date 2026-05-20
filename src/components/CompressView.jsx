@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ChevronRight, TrendingUp, TrendingDown, AlertTriangle, Shield, Zap } from 'lucide-react';
+import { ChevronRight, TrendingUp, TrendingDown, AlertTriangle, Shield, Zap, RefreshCw } from 'lucide-react';
 import IntelligenceCore from './IntelligenceCore';
 import { SCENARIOS, FACTORS, COMPRESSION_DATA, DEFAULT_COMPRESSION } from '../data/scenarios';
 
@@ -12,10 +12,10 @@ const card = {
   }),
 };
 
-function CompressCard({ title, icon, children, delay = 0 }) {
+function CompressCard({ title, icon, children, delay = 0, className = '' }) {
   return (
     <motion.div
-      className="compress-card"
+      className={`compress-card ${className}`}
       custom={delay}
       initial="hidden"
       animate="visible"
@@ -41,13 +41,23 @@ export default function CompressView({ activeScenario }) {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
     >
+      <div className="compress-header">
+        <div className="section-label">COMPRESS</div>
+        <p className="compress-subtitle">From Julien's scenario dashboard to decision intelligence.</p>
+      </div>
+
       <div className="compress-grid">
         {/* Left Column */}
         <div className="compress-left">
           <CompressCard title="CURRENT MACRO SEASON" icon={<Zap size={14} />} delay={0}>
             <div className="season-display">
               <span className="season-icon">{scenario.icon}</span>
-              <span className="season-name">{scenario.label}</span>
+              <div>
+                <span className="season-name">{scenario.label}</span>
+                {scenario.subLabel && (
+                  <span className="season-sublabel">{scenario.subLabel}</span>
+                )}
+              </div>
             </div>
             <p className="scenario-desc">{scenario.description}</p>
           </CompressCard>
@@ -81,20 +91,28 @@ export default function CompressView({ activeScenario }) {
 
         {/* Right Column */}
         <div className="compress-right">
-          <CompressCard title="COMPRESSION VERDICT" icon={<Shield size={14} />} delay={0}>
+          <CompressCard title="COMPRESSION VERDICT" icon={<Shield size={14} />} delay={0} className="verdict-card">
             <div className="verdict-section">
               <div className="verdict-label">BOTTOM LINE</div>
               <p>{compression.bottomLine}</p>
             </div>
             <div className="verdict-section">
               <div className="verdict-label">ACTION BIAS</div>
-              <div className={`action-bias bias-${compression.actionBias.toLowerCase().replace(/\s/g, '-')}`}>
+              <div className={`action-bias bias-${compression.actionBias.toLowerCase().replace(/\s+/g, '-')}`}>
                 {compression.actionBias}
               </div>
             </div>
           </CompressCard>
 
-          <CompressCard title="WHAT CONFIRMS" icon={<TrendingUp size={14} />} delay={1}>
+          <CompressCard title="WHAT CHANGED" icon={<RefreshCw size={14} />} delay={1}>
+            <ul className="verdict-list changed">
+              {compression.whatChanged.map((c, i) => (
+                <li key={i}>{c}</li>
+              ))}
+            </ul>
+          </CompressCard>
+
+          <CompressCard title="WHAT CONFIRMS" icon={<TrendingUp size={14} />} delay={2}>
             <ul className="verdict-list confirms">
               {compression.confirms.map((c, i) => (
                 <li key={i}>{c}</li>
@@ -102,7 +120,7 @@ export default function CompressView({ activeScenario }) {
             </ul>
           </CompressCard>
 
-          <CompressCard title="WHAT INVALIDATES" icon={<AlertTriangle size={14} />} delay={2}>
+          <CompressCard title="WHAT INVALIDATES" icon={<AlertTriangle size={14} />} delay={3}>
             <ul className="verdict-list invalidates">
               {compression.invalidates.map((c, i) => (
                 <li key={i}>{c}</li>
@@ -110,7 +128,7 @@ export default function CompressView({ activeScenario }) {
             </ul>
           </CompressCard>
 
-          <CompressCard title="BEST EXPRESSIONS" icon={<Zap size={14} />} delay={3}>
+          <CompressCard title="BEST EXPRESSIONS" icon={<Zap size={14} />} delay={4}>
             <div className="expressions-list">
               {compression.bestExpressions.map((e, i) => (
                 <div key={i} className="expression-row">
@@ -123,7 +141,7 @@ export default function CompressView({ activeScenario }) {
             </div>
           </CompressCard>
 
-          <CompressCard title="WATCHPOINTS" icon={<AlertTriangle size={14} />} delay={4}>
+          <CompressCard title="WATCHPOINTS" icon={<AlertTriangle size={14} />} delay={5}>
             <ul className="verdict-list watchpoints">
               {compression.watchpoints.map((w, i) => (
                 <li key={i}>{w}</li>
@@ -173,6 +191,7 @@ export default function CompressView({ activeScenario }) {
           <div className="tier-compare">
             <div className="tier-col">
               <div className="tier-name alpha">ALPHA</div>
+              <p className="tier-desc">Data layer</p>
               <ul>
                 <li>Rankings</li>
                 <li>Performance</li>
@@ -182,6 +201,7 @@ export default function CompressView({ activeScenario }) {
             </div>
             <div className="tier-col">
               <div className="tier-name pro">PRO</div>
+              <p className="tier-desc">Intelligence layer</p>
               <ul>
                 <li>Everything in Alpha</li>
                 <li>Your View</li>
