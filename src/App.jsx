@@ -39,7 +39,7 @@ function TabContent({ activeTab, scenario, activeScenario, draftUserFactors, app
     case 'heatmap':
       return <HeatmapView scenario={scenario} appliedUserFactors={appliedUserFactors} />;
     case 'seasons':
-      return <SeasonsView />;
+      return <SeasonsView scenario={scenario} appliedUserFactors={appliedUserFactors} />;
     case 'rankings':
     case 'performance':
     default:
