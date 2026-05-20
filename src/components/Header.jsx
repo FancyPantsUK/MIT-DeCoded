@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
 import TierBadge from './TierBadge';
+import { TIER_LIST } from '../utils/access';
 
-export default function Header({ userTier }) {
+export default function Header({ userTier, onTierChange }) {
   return (
     <motion.header
       className="header"
@@ -19,6 +20,15 @@ export default function Header({ userTier }) {
         <span className="header-badge">Brought to you by GMI</span>
       </div>
       <div className="header-right">
+        <select
+          className="tier-switcher"
+          value={userTier}
+          onChange={(e) => onTierChange(e.target.value)}
+        >
+          {TIER_LIST.map((t) => (
+            <option key={t.id} value={t.id}>{t.label}</option>
+          ))}
+        </select>
         <TierBadge tier={userTier} />
         <div className="rv-badge">RV</div>
       </div>

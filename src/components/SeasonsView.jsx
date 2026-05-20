@@ -1,6 +1,7 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Target, TrendingUp, TrendingDown, GitCompare, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { Target, TrendingUp, TrendingDown, GitCompare, ArrowUpRight, ArrowDownRight, Lock } from 'lucide-react';
+import { canUseMode } from '../utils/access';
 import {
   CANONICAL_SEASONS,
   computeSeasonMap,
@@ -234,8 +235,12 @@ function ComparePanel({ comparison }) {
   );
 }
 
-export default function SeasonsView({ scenario, appliedUserFactors }) {
+export default function SeasonsView({ scenario, appliedUserFactors, userTier }) {
   const [viewMode, setViewMode] = useState('map');
+
+  useEffect(() => {
+    if (!canUseMode(userTier, viewMode)) setViewMode('map');
+  }, [userTier]);
 
   const gmiFactors = scenario.factors;
   const userFactors = appliedUserFactors || gmiFactors;
@@ -275,15 +280,20 @@ export default function SeasonsView({ scenario, appliedUserFactors }) {
         </div>
         <div className="dg-header-right">
           <div className="compress-mode-toggle">
-            {MODES.map((m) => (
-              <button
-                key={m.id}
-                className={`mode-btn ${viewMode === m.id ? 'active' : ''}`}
-                onClick={() => setViewMode(m.id)}
-              >
-                {m.label}
-              </button>
-            ))}
+            {MODES.map((m) => {
+              const locked = !canUseMode(userTier, m.id);
+              return (
+                <button
+                  key={m.id}
+                  className={`mode-btn ${viewMode === m.id ? 'active' : ''} ${locked ? 'locked' : ''}`}
+                  onClick={() => !locked && setViewMode(m.id)}
+                  disabled={locked}
+                >
+                  {m.label}
+                  {locked && <Lock size={10} className="mode-lock-icon" />}
+                </button>
+              );
+            })}
           </div>
           <span className="dg-mode-label">{modeLabel}</span>
         </div>

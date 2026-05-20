@@ -11,18 +11,18 @@ import HeatmapView from './components/HeatmapView';
 import SeasonsView from './components/SeasonsView';
 import LockedView from './components/LockedView';
 import { SCENARIOS, TABS } from './data/scenarios';
-import { canAccess, USER_TIER } from './utils/access';
+import { canAccess, getInitialTier } from './utils/access';
 import './styles.css';
 
-function TabContent({ activeTab, scenario, activeScenario, draftUserFactors, appliedUserFactors, onDraftChange, onApply, onReset }) {
+function TabContent({ activeTab, scenario, activeScenario, userTier, draftUserFactors, appliedUserFactors, onDraftChange, onApply, onReset }) {
   const tab = TABS.find((t) => t.id === activeTab);
-  if (tab && !canAccess(USER_TIER, tab.requiredTier)) {
+  if (tab && !canAccess(userTier, tab.requiredTier)) {
     return <LockedView tab={tab} />;
   }
 
   switch (activeTab) {
     case 'compress':
-      return <CompressView activeScenario={activeScenario} appliedUserFactors={appliedUserFactors} />;
+      return <CompressView activeScenario={activeScenario} appliedUserFactors={appliedUserFactors} userTier={userTier} />;
     case 'your-view':
       return (
         <YourView
@@ -37,13 +37,13 @@ function TabContent({ activeTab, scenario, activeScenario, draftUserFactors, app
     case 'divergence':
       return <DivergenceView scenario={scenario} appliedUserFactors={appliedUserFactors} />;
     case 'heatmap':
-      return <HeatmapView scenario={scenario} appliedUserFactors={appliedUserFactors} />;
+      return <HeatmapView scenario={scenario} appliedUserFactors={appliedUserFactors} userTier={userTier} />;
     case 'seasons':
-      return <SeasonsView scenario={scenario} appliedUserFactors={appliedUserFactors} />;
+      return <SeasonsView scenario={scenario} appliedUserFactors={appliedUserFactors} userTier={userTier} />;
     case 'rankings':
     case 'performance':
     default:
-      return <DataGridView activeTab={activeTab} scenario={scenario} appliedUserFactors={appliedUserFactors} />;
+      return <DataGridView activeTab={activeTab} scenario={scenario} appliedUserFactors={appliedUserFactors} userTier={userTier} />;
   }
 }
 
@@ -52,6 +52,7 @@ export default function App() {
   const [activeScenario, setActiveScenario] = useState('spring');
   const [draftUserFactors, setDraftUserFactors] = useState(null);
   const [appliedUserFactors, setAppliedUserFactors] = useState(null);
+  const [userTier, setUserTier] = useState(getInitialTier);
 
   const scenario = SCENARIOS.find((s) => s.id === activeScenario) || SCENARIOS[0];
 
@@ -83,11 +84,11 @@ export default function App() {
 
   return (
     <div className="app">
-      <Header userTier={USER_TIER} />
+      <Header userTier={userTier} onTierChange={setUserTier} />
 
       <nav className="nav-tabs">
         {TABS.map((tab) => {
-          const locked = !canAccess(USER_TIER, tab.requiredTier);
+          const locked = !canAccess(userTier, tab.requiredTier);
           return (
             <button
               key={tab.id}
@@ -121,6 +122,7 @@ export default function App() {
               activeTab={activeTab}
               scenario={scenario}
               activeScenario={activeScenario}
+              userTier={userTier}
               draftUserFactors={draftUserFactors || scenario.factors}
               appliedUserFactors={appliedUserFactors || scenario.factors}
               onDraftChange={handleDraftChange}

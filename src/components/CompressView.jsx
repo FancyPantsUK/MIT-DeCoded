@@ -1,9 +1,10 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, TrendingUp, TrendingDown, AlertTriangle, Shield, Zap, RefreshCw, Eye, GitCompare, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { ChevronRight, TrendingUp, TrendingDown, AlertTriangle, Shield, Zap, RefreshCw, Eye, GitCompare, ArrowUpRight, ArrowDownRight, Lock } from 'lucide-react';
 import CompressionRitual from './CompressionRitual';
 import { SCENARIOS, FACTORS, COMPRESSION_DATA, DEFAULT_COMPRESSION } from '../data/scenarios';
 import { compressFactors, compareCompressions } from '../utils/compressFactors';
+import { canUseMode } from '../utils/access';
 
 const MODES = [
   { id: 'gmi', label: 'GMI View' },
@@ -244,11 +245,15 @@ function CompareColumn({ comparison, resolved }) {
   );
 }
 
-export default function CompressView({ activeScenario, appliedUserFactors }) {
+export default function CompressView({ activeScenario, appliedUserFactors, userTier }) {
   const scenario = SCENARIOS.find((s) => s.id === activeScenario) || SCENARIOS[0];
   const gmiCompression = COMPRESSION_DATA[activeScenario] || DEFAULT_COMPRESSION;
   const [ritualPhase, setRitualPhase] = useState('intake');
   const [compressMode, setCompressMode] = useState('gmi');
+
+  useEffect(() => {
+    if (!canUseMode(userTier, compressMode)) setCompressMode('gmi');
+  }, [userTier]);
 
   const resolved = ritualPhase === 'resolved';
 
@@ -283,15 +288,20 @@ export default function CompressView({ activeScenario, appliedUserFactors }) {
         <div className="compress-hero-right">
           {/* Mode Toggle */}
           <div className="compress-mode-toggle">
-            {MODES.map((m) => (
-              <button
-                key={m.id}
-                className={`mode-btn ${compressMode === m.id ? 'active' : ''}`}
-                onClick={() => setCompressMode(m.id)}
-              >
-                {m.label}
-              </button>
-            ))}
+            {MODES.map((m) => {
+              const locked = !canUseMode(userTier, m.id);
+              return (
+                <button
+                  key={m.id}
+                  className={`mode-btn ${compressMode === m.id ? 'active' : ''} ${locked ? 'locked' : ''}`}
+                  onClick={() => !locked && setCompressMode(m.id)}
+                  disabled={locked}
+                >
+                  {m.label}
+                  {locked && <Lock size={10} className="mode-lock-icon" />}
+                </button>
+              );
+            })}
           </div>
           <div className="compress-hero-stats">
             <div className="compress-hero-stat">

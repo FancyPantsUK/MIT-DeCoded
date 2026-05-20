@@ -1,7 +1,8 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight, GitCompare } from 'lucide-react';
+import { TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight, GitCompare, Lock } from 'lucide-react';
 import { groupRankingsByCategory, rankAssetsByScenario, compareRankings } from '../utils/scoreAssets';
+import { canUseMode } from '../utils/access';
 
 const MODES = [
   { id: 'gmi', label: 'GMI View' },
@@ -168,8 +169,13 @@ function CompareView({ comparison }) {
   );
 }
 
-export default function DataGridView({ activeTab, scenario, appliedUserFactors }) {
+export default function DataGridView({ activeTab, scenario, appliedUserFactors, userTier }) {
   const [viewMode, setViewMode] = useState('gmi');
+
+  // Force fallback if tier loses access to current mode
+  useEffect(() => {
+    if (!canUseMode(userTier, viewMode)) setViewMode('gmi');
+  }, [userTier]);
   const isPerformance = activeTab === 'performance';
 
   const gmiFactors = scenario.factors;
@@ -209,15 +215,20 @@ export default function DataGridView({ activeTab, scenario, appliedUserFactors }
         </div>
         <div className="dg-header-right">
           <div className="compress-mode-toggle">
-            {MODES.map((m) => (
-              <button
-                key={m.id}
-                className={`mode-btn ${viewMode === m.id ? 'active' : ''}`}
-                onClick={() => setViewMode(m.id)}
-              >
-                {m.label}
-              </button>
-            ))}
+            {MODES.map((m) => {
+              const locked = !canUseMode(userTier, m.id);
+              return (
+                <button
+                  key={m.id}
+                  className={`mode-btn ${viewMode === m.id ? 'active' : ''} ${locked ? 'locked' : ''}`}
+                  onClick={() => !locked && setViewMode(m.id)}
+                  disabled={locked}
+                >
+                  {m.label}
+                  {locked && <Lock size={10} className="mode-lock-icon" />}
+                </button>
+              );
+            })}
           </div>
           <span className="dg-mode-label">{modeLabel}</span>
         </div>

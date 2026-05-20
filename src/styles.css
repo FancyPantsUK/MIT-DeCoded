@@ -130,6 +130,44 @@ body {
   border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
+.tier-sandbox {
+  background: rgba(168, 85, 247, 0.15);
+  color: #a855f7;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.tier-admin {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--red);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* ── Tier Switcher (dev) ── */
+.tier-switcher {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-muted);
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.tier-switcher:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  color: var(--text-dim);
+}
+
+.tier-switcher option {
+  background: var(--bg-secondary);
+  color: var(--text);
+}
+
 /* ── Nav Tabs ── */
 .nav-tabs {
   display: flex;
@@ -2639,6 +2677,25 @@ body {
   background: rgba(245, 158, 11, 0.15);
   color: var(--amber);
   box-shadow: 0 0 8px rgba(245, 158, 11, 0.1);
+}
+
+.mode-btn.locked {
+  opacity: 0.35;
+  cursor: not-allowed;
+  position: relative;
+  gap: 3px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.mode-btn.locked:hover {
+  color: var(--text-muted);
+  background: transparent;
+}
+
+.mode-lock-icon {
+  flex-shrink: 0;
+  opacity: 0.6;
 }
 
 /* ── Compare View Cards ── */
