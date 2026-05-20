@@ -1,15 +1,15 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, TrendingUp, TrendingDown, AlertTriangle, Shield, Zap, RefreshCw } from 'lucide-react';
 import CompressionRitual from './CompressionRitual';
 import { SCENARIOS, FACTORS, COMPRESSION_DATA, DEFAULT_COMPRESSION } from '../data/scenarios';
 
 const card = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 14 },
   visible: (i) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.1, duration: 0.4 },
+    transition: { delay: i * 0.08, duration: 0.35 },
   }),
 };
 
@@ -36,14 +36,14 @@ export default function CompressView({ activeScenario }) {
   const compression = COMPRESSION_DATA[activeScenario] || DEFAULT_COMPRESSION;
   const [ritualPhase, setRitualPhase] = useState('intake');
 
-  const verdardDelay = (i) => (ritualPhase === 'resolved' ? i * 0.08 : 0);
+  const resolved = ritualPhase === 'resolved';
 
   return (
     <motion.div
       className="compress-view"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.4 }}
+      transition={{ duration: 0.3 }}
     >
       <div className="compress-header">
         <div className="section-label">COMPRESS</div>
@@ -66,7 +66,11 @@ export default function CompressView({ activeScenario }) {
             <p className="scenario-desc">{scenario.description}</p>
           </CompressCard>
 
-          <CompressCard title="FACTOR SUMMARY" icon={<TrendingUp size={14} />} delay={1}>
+          <CompressCard title="SCENARIO READ" icon={<ChevronRight size={14} />} delay={1}>
+            <p className="scenario-read">{compression.bottomLine}</p>
+          </CompressCard>
+
+          <CompressCard title="FACTOR SUMMARY" icon={<TrendingUp size={14} />} delay={2}>
             <div className="factor-summary-list">
               {FACTORS.map((f) => {
                 const val = scenario.factors[f.id] || 0;
@@ -82,10 +86,6 @@ export default function CompressView({ activeScenario }) {
               })}
             </div>
           </CompressCard>
-
-          <CompressCard title="SCENARIO READ" icon={<ChevronRight size={14} />} delay={2}>
-            <p className="scenario-read">{compression.bottomLine}</p>
-          </CompressCard>
         </div>
 
         {/* Centre Column — Compression Ritual */}
@@ -94,87 +94,105 @@ export default function CompressView({ activeScenario }) {
             scenarioFactors={scenario.factors}
             convictionScore={compression.convictionScore}
             onPhaseChange={setRitualPhase}
-          >
-            {/* Verdict cards revealed after ritual resolves */}
-            <div className="ritual-verdict-stack">
-              <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: verdardDelay(0), duration: 0.35 }}>
-                <CompressCard title="COMPRESSION VERDICT" icon={<Shield size={14} />} delay={0} className="verdict-card">
-                  <div className="verdict-section">
-                    <div className="verdict-label">BOTTOM LINE</div>
-                    <p>{compression.bottomLine}</p>
-                  </div>
-                  <div className="verdict-section">
-                    <div className="verdict-label">ACTION BIAS</div>
-                    <div className={`action-bias bias-${compression.actionBias.toLowerCase().replace(/\s+/g, '-')}`}>
-                      {compression.actionBias}
-                    </div>
-                  </div>
-                </CompressCard>
-              </motion.div>
-
-              <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: verdardDelay(1), duration: 0.35 }}>
-                <CompressCard title="WHAT CHANGED" icon={<RefreshCw size={14} />} delay={0}>
-                  <ul className="verdict-list changed">
-                    {compression.whatChanged.map((c, i) => (
-                      <li key={i}>{c}</li>
-                    ))}
-                  </ul>
-                </CompressCard>
-              </motion.div>
-
-              <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: verdardDelay(2), duration: 0.35 }}>
-                <CompressCard title="BEST EXPRESSIONS" icon={<Zap size={14} />} delay={0}>
-                  <div className="expressions-list">
-                    {compression.bestExpressions.map((e, i) => (
-                      <div key={i} className="expression-row">
-                        <span>{e.name}</span>
-                        <span className={`conviction conviction-${e.conviction.toLowerCase()}`}>
-                          {e.conviction}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </CompressCard>
-              </motion.div>
-
-              <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: verdardDelay(3), duration: 0.35 }}>
-                <CompressCard title="WATCHPOINTS" icon={<AlertTriangle size={14} />} delay={0}>
-                  <ul className="verdict-list watchpoints">
-                    {compression.watchpoints.map((w, i) => (
-                      <li key={i}>{w}</li>
-                    ))}
-                  </ul>
-                </CompressCard>
-              </motion.div>
-            </div>
-          </CompressionRitual>
+          />
         </div>
 
-        {/* Right Column */}
+        {/* Right Column — Verdict (visible immediately on resolve) */}
         <div className="compress-right">
-          <CompressCard title="WHAT CONFIRMS" icon={<TrendingUp size={14} />} delay={2}>
-            <ul className="verdict-list confirms">
-              {compression.confirms.map((c, i) => (
-                <li key={i}>{c}</li>
-              ))}
-            </ul>
-          </CompressCard>
+          <AnimatePresence>
+            {resolved && (
+              <>
+                <motion.div key="verdict" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
+                  <CompressCard title="COMPRESSION VERDICT" icon={<Shield size={14} />} delay={0} className="verdict-card">
+                    <div className="verdict-section">
+                      <div className="verdict-label">BOTTOM LINE</div>
+                      <p>{compression.bottomLine}</p>
+                    </div>
+                    <div className="verdict-section">
+                      <div className="verdict-label">ACTION BIAS</div>
+                      <div className={`action-bias bias-${compression.actionBias.toLowerCase().replace(/\s+/g, '-')}`}>
+                        {compression.actionBias}
+                      </div>
+                    </div>
+                    <div className="verdict-section">
+                      <div className="verdict-label">CONFIDENCE</div>
+                      <div className="verdict-confidence">{compression.convictionScore}/100</div>
+                    </div>
+                  </CompressCard>
+                </motion.div>
 
-          <CompressCard title="WHAT INVALIDATES" icon={<AlertTriangle size={14} />} delay={3}>
-            <ul className="verdict-list invalidates">
-              {compression.invalidates.map((c, i) => (
-                <li key={i}>{c}</li>
-              ))}
-            </ul>
-          </CompressCard>
+                <motion.div key="changed" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ delay: 0.06, duration: 0.3 }}>
+                  <CompressCard title="WHAT CHANGED" icon={<RefreshCw size={14} />} delay={0}>
+                    <ul className="verdict-list changed">
+                      {compression.whatChanged.map((c, i) => (
+                        <li key={i}>{c}</li>
+                      ))}
+                    </ul>
+                  </CompressCard>
+                </motion.div>
+
+                <motion.div key="confirms" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ delay: 0.12, duration: 0.3 }}>
+                  <CompressCard title="WHAT CONFIRMS" icon={<TrendingUp size={14} />} delay={0}>
+                    <ul className="verdict-list confirms">
+                      {compression.confirms.map((c, i) => (
+                        <li key={i}>{c}</li>
+                      ))}
+                    </ul>
+                  </CompressCard>
+                </motion.div>
+
+                <motion.div key="invalidates" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ delay: 0.18, duration: 0.3 }}>
+                  <CompressCard title="WHAT INVALIDATES" icon={<AlertTriangle size={14} />} delay={0}>
+                    <ul className="verdict-list invalidates">
+                      {compression.invalidates.map((c, i) => (
+                        <li key={i}>{c}</li>
+                      ))}
+                    </ul>
+                  </CompressCard>
+                </motion.div>
+
+                <motion.div key="expressions" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ delay: 0.24, duration: 0.3 }}>
+                  <CompressCard title="BEST EXPRESSIONS" icon={<Zap size={14} />} delay={0}>
+                    <div className="expressions-list">
+                      {compression.bestExpressions.map((e, i) => (
+                        <div key={i} className="expression-row">
+                          <span>{e.name}</span>
+                          <span className={`conviction conviction-${e.conviction.toLowerCase()}`}>
+                            {e.conviction}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </CompressCard>
+                </motion.div>
+
+                <motion.div key="watchpoints" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ delay: 0.3, duration: 0.3 }}>
+                  <CompressCard title="WATCHPOINTS" icon={<AlertTriangle size={14} />} delay={0}>
+                    <ul className="verdict-list watchpoints">
+                      {compression.watchpoints.map((w, i) => (
+                        <li key={i}>{w}</li>
+                      ))}
+                    </ul>
+                  </CompressCard>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
+
+          {/* Placeholder when ritual is running */}
+          {!resolved && (
+            <div className="verdict-pending">
+              <div className="verdict-pending-text">Awaiting compression...</div>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Bottom Cards Row */}
       <div className="compress-bottom">
-        <motion.div className="bottom-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}>
+        <motion.div className="bottom-card" initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
           <div className="bottom-card-title">
-            <TrendingUp size={14} /> TOP POSITIVE EXPRESSIONS
+            <TrendingUp size={14} /> TOP POSITIVE
           </div>
           <div className="expression-tags">
             {compression.topPositive.map((t, i) => (
@@ -183,9 +201,9 @@ export default function CompressView({ activeScenario }) {
           </div>
         </motion.div>
 
-        <motion.div className="bottom-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }}>
+        <motion.div className="bottom-card" initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }}>
           <div className="bottom-card-title">
-            <TrendingDown size={14} /> TOP NEGATIVE EXPRESSIONS
+            <TrendingDown size={14} /> TOP NEGATIVE
           </div>
           <div className="expression-tags">
             {compression.topNegative.map((t, i) => (
@@ -194,9 +212,9 @@ export default function CompressView({ activeScenario }) {
           </div>
         </motion.div>
 
-        <motion.div className="bottom-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}>
+        <motion.div className="bottom-card" initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
           <div className="bottom-card-title">
-            <AlertTriangle size={14} /> WHERE YOU DISAGREE WITH GMI
+            <AlertTriangle size={14} /> GMI DISAGREE
           </div>
           <div className="expression-tags">
             {compression.gmiDisagree.map((t, i) => (
@@ -205,8 +223,8 @@ export default function CompressView({ activeScenario }) {
           </div>
         </motion.div>
 
-        <motion.div className="bottom-card tier-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9 }}>
-          <div className="bottom-card-title">UPGRADE YOUR INTELLIGENCE</div>
+        <motion.div className="bottom-card tier-card" initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.55 }}>
+          <div className="bottom-card-title">UPGRADE</div>
           <div className="tier-compare">
             <div className="tier-col">
               <div className="tier-name alpha">ALPHA</div>
@@ -226,7 +244,6 @@ export default function CompressView({ activeScenario }) {
                 <li>Your View</li>
                 <li>Divergence</li>
                 <li>Compress</li>
-                <li>Ask Dashboard</li>
               </ul>
             </div>
           </div>
