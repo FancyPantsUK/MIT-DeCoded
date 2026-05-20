@@ -201,8 +201,8 @@ body {
 .tab-subtitle {
   font-size: 13px;
   color: var(--text-muted);
-  margin-top: -8px;
-  margin-bottom: 20px;
+  margin-top: -2px;
+  margin-bottom: 14px;
 }
 
 /* ── Scenario Selector ── */
@@ -505,7 +505,7 @@ body {
 
 .scenario-read {
   font-size: 12px;
-  line-height: 1.6;
+  line-height: 1.45;
   color: var(--text-dim);
 }
 
@@ -555,6 +555,14 @@ body {
 
 @keyframes spin-slow {
   to { transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spin-reverse {
+  to { transform: rotate(-360deg); }
 }
 
 .intel-orb {
