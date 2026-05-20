@@ -40,7 +40,7 @@ export default function DivergenceView() {
 
       <div className="section-label" style={{ marginTop: 24 }}>TOP 10 LARGEST DIFFERENCES</div>
       <div className="divergence-tags">
-        {DIVERGENCE_DATA
+        {[...DIVERGENCE_DATA]
           .sort((a, b) => Math.abs(parseFloat(b.gap)) - Math.abs(parseFloat(a.gap)))
           .map((row) => {
             const gapNum = parseFloat(row.gap);

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import Header from './components/Header';
 import ScenarioSelector from './components/ScenarioSelector';
 import FactorStrip from './components/FactorStrip';
@@ -73,12 +73,19 @@ export default function App() {
 
       <main className="main-content">
         <AnimatePresence mode="wait">
-          <TabContent
+          <motion.div
             key={activeTab}
-            activeTab={activeTab}
-            scenario={scenario}
-            activeScenario={activeScenario}
-          />
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <TabContent
+              activeTab={activeTab}
+              scenario={scenario}
+              activeScenario={activeScenario}
+            />
+          </motion.div>
         </AnimatePresence>
       </main>
     </div>
