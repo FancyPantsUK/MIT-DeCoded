@@ -188,8 +188,61 @@ body {
   border-color: var(--teal);
 }
 
-/* Alpha gate overlay on hero */
-.hero-alpha-gate {
+/* ── Alpha Preview: frosted locked verdict ── */
+.alpha-preview-view {
+  /* inherits compress-view layout */
+}
+
+/* Skeleton content bars */
+.skeleton-line {
+  height: 8px;
+  background: linear-gradient(90deg,
+    rgba(56, 189, 248, 0.06) 0%,
+    rgba(56, 189, 248, 0.12) 50%,
+    rgba(56, 189, 248, 0.06) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 2s ease-in-out infinite;
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+
+.skeleton-line:last-child { margin-bottom: 0; }
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-card {
+  opacity: 0.6;
+}
+
+.skeleton-verdict {
+  opacity: 0.5;
+}
+
+/* Skeleton expression tags */
+.tag-skeleton {
+  display: inline-block;
+  width: 60px;
+  height: 20px;
+  background: rgba(56, 189, 248, 0.06);
+  border: 1px solid rgba(56, 189, 248, 0.08);
+  border-radius: 4px;
+  animation: skeleton-shimmer 2.5s ease-in-out infinite;
+  background-size: 200% 100%;
+}
+
+.tag-skeleton-sm { width: 45px; }
+
+/* Bottom frost for Alpha */
+.alpha-bottom-frost .bottom-card {
+  opacity: 0.4;
+}
+
+/* ── Frosted glass lock system ── */
+.pro-frost-lock-wrapper {
   position: relative;
   flex: 1;
   min-height: 0;
@@ -197,54 +250,101 @@ body {
   flex-direction: column;
 }
 
-.hero-alpha-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 10;
-  padding: 0 16px 12px;
-  background: linear-gradient(0deg, rgba(10, 14, 26, 0.95) 0%, rgba(10, 14, 26, 0.7) 50%, transparent 100%);
-  pointer-events: none;
-  display: flex;
-  justify-content: center;
-}
-
-.hero-alpha-lock-card {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 20px;
-  background: rgba(17, 24, 39, 0.95);
-  border: 1px solid rgba(245, 158, 11, 0.2);
-  border-radius: 10px;
-  backdrop-filter: blur(12px);
-  pointer-events: auto;
-  max-width: 480px;
-}
-
-.hero-alpha-lock-icon {
-  color: var(--amber);
-  flex-shrink: 0;
-}
-
-.hero-alpha-lock-text {
+.frosted-content {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 6px;
+  filter: blur(3px);
+  opacity: 0.5;
+  user-select: none;
+  pointer-events: none;
 }
 
-.hero-alpha-lock-title {
-  font-size: 12px;
-  font-weight: 700;
+.pro-frost-lock {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+.pro-frost-lock-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 24px;
+  background: rgba(5, 12, 24, 0.88);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 12px;
+  backdrop-filter: blur(16px);
+  text-align: center;
+  max-width: 280px;
+}
+
+.pro-frost-lock-icon {
+  color: var(--amber);
+}
+
+.pro-frost-lock-title {
+  font-size: 14px;
+  font-weight: 800;
   letter-spacing: 0.5px;
   color: var(--amber);
 }
 
-.hero-alpha-lock-desc {
+.pro-frost-lock-desc {
   font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.pro-frost-lock-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  text-align: left;
+  padding: 0;
+  margin: 0;
+}
+
+.pro-frost-lock-features li {
+  font-size: 10px;
   color: var(--text-muted);
-  line-height: 1.35;
+  padding-left: 14px;
+  position: relative;
+  line-height: 1.4;
+}
+
+.pro-frost-lock-features li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 5px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(245, 158, 11, 0.4);
+}
+
+.pro-frost-lock-cta {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--teal-dim);
+  padding-top: 4px;
+  border-top: 1px solid rgba(56, 189, 248, 0.1);
+  width: 100%;
+}
+
+/* Alpha frosted column */
+.alpha-frosted-column {
+  overflow: visible;
 }
 
 /* ── Header ── */
@@ -669,7 +769,7 @@ body {
   padding-top: 0;
   gap: 0;
   min-height: 0;
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* ── Compress Cards ── */
