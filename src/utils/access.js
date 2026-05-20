@@ -34,5 +34,5 @@ export function getInitialTier() {
     const tier = params.get('tier');
     if (tier && TIER_LEVELS[tier]) return tier;
   }
-  return 'pro';
+  return 'alpha';
 }
