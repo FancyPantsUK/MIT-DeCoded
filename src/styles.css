@@ -48,6 +48,205 @@ body {
   overflow: hidden;
 }
 
+/* ── Hero / Expert Shell ── */
+.hero-shell,
+.expert-shell {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Compression Hero Page ── */
+.compression-hero-page {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.hero-header-band {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px 16px;
+  margin-bottom: 4px;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, rgba(17, 24, 39, 0.95), rgba(15, 23, 42, 0.8));
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-header-band::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--trace-angle, 0deg),
+    transparent 0%,
+    transparent 72%,
+    rgba(56, 189, 248, 0.35) 80%,
+    rgba(245, 158, 11, 0.5) 85%,
+    transparent 93%,
+    transparent 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: electric-spin 5s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-header-left {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-headline {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: var(--text);
+  margin: 0;
+}
+
+.hero-headline-accent {
+  color: var(--teal);
+}
+
+.hero-tagline {
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.3px;
+  margin-top: 2px;
+}
+
+.hero-header-right {
+  position: relative;
+  z-index: 1;
+}
+
+/* Expert Mode button */
+.expert-mode-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 18px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 8px;
+  background: rgba(56, 189, 248, 0.08);
+  color: var(--teal);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.expert-mode-btn:hover {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: var(--teal);
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.15);
+  transform: translateY(-1px);
+}
+
+.expert-mode-btn:active {
+  transform: scale(0.97);
+}
+
+/* Exit Expert button */
+.exit-expert-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: rgba(56, 189, 248, 0.05);
+  color: var(--teal);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.exit-expert-btn:hover {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: var(--teal);
+}
+
+/* Alpha gate overlay on hero */
+.hero-alpha-gate {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-alpha-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  padding: 0 16px 12px;
+  background: linear-gradient(0deg, rgba(10, 14, 26, 0.95) 0%, rgba(10, 14, 26, 0.7) 50%, transparent 100%);
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+}
+
+.hero-alpha-lock-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  background: rgba(17, 24, 39, 0.95);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 10px;
+  backdrop-filter: blur(12px);
+  pointer-events: auto;
+  max-width: 480px;
+}
+
+.hero-alpha-lock-icon {
+  color: var(--amber);
+  flex-shrink: 0;
+}
+
+.hero-alpha-lock-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hero-alpha-lock-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--amber);
+}
+
+.hero-alpha-lock-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+
 /* ── Header ── */
 .header {
   display: flex;

@@ -1,8 +1,9 @@
 import { motion } from 'framer-motion';
+import { ArrowLeft } from 'lucide-react';
 import TierBadge from './TierBadge';
 import { TIER_LIST } from '../utils/access';
 
-export default function Header({ userTier, onTierChange }) {
+export default function Header({ userTier, onTierChange, viewMode, onExitExpert }) {
   return (
     <motion.header
       className="header"
@@ -14,12 +15,22 @@ export default function Header({ userTier, onTierChange }) {
         <h1 className="header-title">
           MIT <span className="header-title-accent">DeCoded</span>
         </h1>
-        <p className="header-subtitle">
-          MIT Macro Scenario Tool | Scenario Analysis Dashboard
-        </p>
+        {viewMode === 'expert' ? (
+          <p className="header-subtitle">Expert Mode — Full Scenario Dashboard</p>
+        ) : (
+          <p className="header-subtitle">
+            MIT Macro Scenario Tool | Scenario Analysis Dashboard
+          </p>
+        )}
         <span className="header-badge">Brought to you by GMI</span>
       </div>
       <div className="header-right">
+        {viewMode === 'expert' && (
+          <button className="exit-expert-btn electric-btn" onClick={onExitExpert}>
+            <ArrowLeft size={13} />
+            <span>Back to Compression</span>
+          </button>
+        )}
         <select
           className="tier-switcher"
           value={userTier}

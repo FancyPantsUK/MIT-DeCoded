@@ -554,7 +554,7 @@ export const TABS = [
   { id: 'divergence', label: 'Divergence', requiredTier: 'pro', description: 'View Divergence Analysis vs GMI consensus' },
   { id: 'heatmap', label: 'Heatmap', requiredTier: 'alpha', description: 'Factor Sensitivity Matrix across assets' },
   { id: 'seasons', label: 'Seasons', requiredTier: 'alpha', description: 'Macro Season Scorecard for each asset' },
-  { id: 'compress', label: 'Compress', requiredTier: 'pro', description: 'Decision intelligence compression surface' },
+  { id: 'compress', label: 'Compress Detail', requiredTier: 'pro', description: 'Decision intelligence compression surface — full cockpit view' },
 ];
 
 // Heatmap data: sensitivity of each asset to each factor

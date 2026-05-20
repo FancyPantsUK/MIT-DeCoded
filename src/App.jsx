@@ -4,6 +4,7 @@ import Header from './components/Header';
 import ScenarioSelector from './components/ScenarioSelector';
 import FactorStrip from './components/FactorStrip';
 import CompressView from './components/CompressView';
+import CompressionHero from './components/CompressionHero';
 import DataGridView from './components/DataGridView';
 import YourView from './components/YourView';
 import DivergenceView from './components/DivergenceView';
@@ -51,7 +52,8 @@ function TabContent({ activeTab, scenario, activeScenario, userTier, draftUserFa
 }
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('compress');
+  const [viewMode, setViewMode] = useState('hero'); // 'hero' | 'expert'
+  const [activeTab, setActiveTab] = useState('rankings');
   const [activeScenario, setActiveScenario] = useState('spring');
   const [draftUserFactors, setDraftUserFactors] = useState(null);
   const [appliedUserFactors, setAppliedUserFactors] = useState(null);
@@ -59,13 +61,11 @@ export default function App() {
 
   const scenario = SCENARIOS.find((s) => s.id === activeScenario) || SCENARIOS[0];
 
-  // Reset user factors when scenario changes
   useEffect(() => {
     setDraftUserFactors({ ...scenario.factors });
     setAppliedUserFactors({ ...scenario.factors });
   }, [activeScenario]);
 
-  // Initialize on first render
   useEffect(() => {
     if (!draftUserFactors) {
       setDraftUserFactors({ ...scenario.factors });
@@ -85,73 +85,116 @@ export default function App() {
     setDraftUserFactors({ ...scenario.factors });
   }, [scenario.factors]);
 
+  const enterExpert = useCallback(() => {
+    setViewMode('expert');
+    setActiveTab('rankings');
+  }, []);
+
+  const exitExpert = useCallback(() => {
+    setViewMode('hero');
+  }, []);
+
   return (
     <div className="app">
-      <Header userTier={userTier} onTierChange={setUserTier} />
-
-      <nav className="nav-tabs">
-        {TABS.map((tab) => {
-          const locked = !canAccess(userTier, tab.requiredTier);
-          return (
-            <button
-              key={tab.id}
-              className={`nav-tab ${activeTab === tab.id ? 'active' : ''} ${locked ? 'locked' : ''}`}
-              onClick={() => setActiveTab(tab.id)}
-            >
-              {tab.label}
-              {tab.requiredTier === 'pro' && <span className="pro-dot" />}
-            </button>
-          );
-        })}
-      </nav>
-
-      <ScenarioSelector
-        activeScenario={activeScenario}
-        onSelect={setActiveScenario}
+      <Header
+        userTier={userTier}
+        onTierChange={setUserTier}
+        viewMode={viewMode}
+        onExitExpert={exitExpert}
       />
 
-      <FactorStrip scenarioFactors={scenario.factors} />
-
-      <main className="main-content">
-        <AnimatePresence mode="wait">
+      <AnimatePresence mode="wait">
+        {viewMode === 'hero' ? (
           <motion.div
-            key={activeTab}
+            key="hero"
+            className="hero-shell"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.25 }}
           >
-            <TabContent
-              activeTab={activeTab}
-              scenario={scenario}
+            <CompressionHero
               activeScenario={activeScenario}
-              userTier={userTier}
-              draftUserFactors={draftUserFactors || scenario.factors}
+              onSelectScenario={setActiveScenario}
               appliedUserFactors={appliedUserFactors || scenario.factors}
-              onDraftChange={handleDraftChange}
-              onApply={handleApply}
-              onReset={handleReset}
+              userTier={userTier}
+              onEnterExpert={enterExpert}
+            />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="expert"
+            className="expert-shell"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+          >
+            <nav className="nav-tabs">
+              {TABS.map((tab) => {
+                const locked = !canAccess(userTier, tab.requiredTier);
+                return (
+                  <button
+                    key={tab.id}
+                    className={`nav-tab ${activeTab === tab.id ? 'active' : ''} ${locked ? 'locked' : ''}`}
+                    onClick={() => setActiveTab(tab.id)}
+                  >
+                    {tab.label}
+                    {tab.requiredTier === 'pro' && <span className="pro-dot" />}
+                  </button>
+                );
+              })}
+            </nav>
+
+            <ScenarioSelector
+              activeScenario={activeScenario}
+              onSelect={setActiveScenario}
             />
 
-            {/* Tier-gated vision panels — appear below tab content on relevant tabs */}
-            {activeTab === 'heatmap' && canAccess(userTier, 'sandbox') && (
-              <div className="vision-panels">
-                <SensitivitySandbox />
-              </div>
-            )}
-            {activeTab === 'compress' && canAccess(userTier, 'pro') && (
-              <div className="vision-panels">
-                <DataSourceLayer />
-              </div>
-            )}
-            {activeTab === 'compress' && canAccess(userTier, 'admin') && (
-              <div className="vision-panels">
-                <AdminControlPanel />
-              </div>
-            )}
+            <FactorStrip scenarioFactors={scenario.factors} />
+
+            <main className="main-content">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeTab}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <TabContent
+                    activeTab={activeTab}
+                    scenario={scenario}
+                    activeScenario={activeScenario}
+                    userTier={userTier}
+                    draftUserFactors={draftUserFactors || scenario.factors}
+                    appliedUserFactors={appliedUserFactors || scenario.factors}
+                    onDraftChange={handleDraftChange}
+                    onApply={handleApply}
+                    onReset={handleReset}
+                  />
+
+                  {activeTab === 'heatmap' && canAccess(userTier, 'sandbox') && (
+                    <div className="vision-panels">
+                      <SensitivitySandbox />
+                    </div>
+                  )}
+                  {activeTab === 'compress' && canAccess(userTier, 'pro') && (
+                    <div className="vision-panels">
+                      <DataSourceLayer />
+                    </div>
+                  )}
+                  {activeTab === 'compress' && canAccess(userTier, 'admin') && (
+                    <div className="vision-panels">
+                      <AdminControlPanel />
+                    </div>
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            </main>
           </motion.div>
-        </AnimatePresence>
-      </main>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
