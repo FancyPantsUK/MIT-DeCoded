@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Header from './components/Header';
 import ScenarioSelector from './components/ScenarioSelector';
@@ -14,7 +14,7 @@ import { SCENARIOS, TABS } from './data/scenarios';
 import { canAccess, USER_TIER } from './utils/access';
 import './styles.css';
 
-function TabContent({ activeTab, scenario, activeScenario }) {
+function TabContent({ activeTab, scenario, activeScenario, draftUserFactors, appliedUserFactors, onDraftChange, onApply, onReset }) {
   const tab = TABS.find((t) => t.id === activeTab);
   if (tab && !canAccess(USER_TIER, tab.requiredTier)) {
     return <LockedView tab={tab} />;
@@ -24,9 +24,18 @@ function TabContent({ activeTab, scenario, activeScenario }) {
     case 'compress':
       return <CompressView activeScenario={activeScenario} />;
     case 'your-view':
-      return <YourView scenario={scenario} />;
+      return (
+        <YourView
+          scenario={scenario}
+          draftUserFactors={draftUserFactors}
+          appliedUserFactors={appliedUserFactors}
+          onDraftChange={onDraftChange}
+          onApply={onApply}
+          onReset={onReset}
+        />
+      );
     case 'divergence':
-      return <DivergenceView />;
+      return <DivergenceView scenario={scenario} appliedUserFactors={appliedUserFactors} />;
     case 'heatmap':
       return <HeatmapView />;
     case 'seasons':
@@ -41,8 +50,36 @@ function TabContent({ activeTab, scenario, activeScenario }) {
 export default function App() {
   const [activeTab, setActiveTab] = useState('compress');
   const [activeScenario, setActiveScenario] = useState('spring');
+  const [draftUserFactors, setDraftUserFactors] = useState(null);
+  const [appliedUserFactors, setAppliedUserFactors] = useState(null);
 
   const scenario = SCENARIOS.find((s) => s.id === activeScenario) || SCENARIOS[0];
+
+  // Reset user factors when scenario changes
+  useEffect(() => {
+    setDraftUserFactors({ ...scenario.factors });
+    setAppliedUserFactors({ ...scenario.factors });
+  }, [activeScenario]);
+
+  // Initialize on first render
+  useEffect(() => {
+    if (!draftUserFactors) {
+      setDraftUserFactors({ ...scenario.factors });
+      setAppliedUserFactors({ ...scenario.factors });
+    }
+  }, []);
+
+  const handleDraftChange = useCallback((factorId, value) => {
+    setDraftUserFactors((prev) => ({ ...prev, [factorId]: value }));
+  }, []);
+
+  const handleApply = useCallback(() => {
+    setAppliedUserFactors({ ...draftUserFactors });
+  }, [draftUserFactors]);
+
+  const handleReset = useCallback(() => {
+    setDraftUserFactors({ ...scenario.factors });
+  }, [scenario.factors]);
 
   return (
     <div className="app">
@@ -84,6 +121,11 @@ export default function App() {
               activeTab={activeTab}
               scenario={scenario}
               activeScenario={activeScenario}
+              draftUserFactors={draftUserFactors || scenario.factors}
+              appliedUserFactors={appliedUserFactors || scenario.factors}
+              onDraftChange={handleDraftChange}
+              onApply={handleApply}
+              onReset={handleReset}
             />
           </motion.div>
         </AnimatePresence>
