@@ -14,6 +14,7 @@ export default function Header({ userTier, onTierChange, viewMode, onExitExpert 
       <div className="header-left">
         <h1 className="header-title">
           MIT <span className="header-title-accent">DeCoded</span>
+          <span className="header-version-badge">V2</span>
         </h1>
         {viewMode === 'expert' ? (
           <p className="header-subtitle">Expert Mode — Full Scenario Dashboard</p>

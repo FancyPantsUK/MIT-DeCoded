@@ -698,6 +698,19 @@ body {
   border-radius: 4px;
 }
 
+.header-version-badge {
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: var(--teal);
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-left: 6px;
+  vertical-align: super;
+}
+
 .header-right {
   display: flex;
   align-items: center;
