@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronRight, TrendingUp, TrendingDown, AlertTriangle, Shield, Zap, RefreshCw } from 'lucide-react';
-import IntelligenceCore from './IntelligenceCore';
+import CompressionRitual from './CompressionRitual';
 import { SCENARIOS, FACTORS, COMPRESSION_DATA, DEFAULT_COMPRESSION } from '../data/scenarios';
 
 const card = {
@@ -33,6 +34,9 @@ function CompressCard({ title, icon, children, delay = 0, className = '' }) {
 export default function CompressView({ activeScenario }) {
   const scenario = SCENARIOS.find((s) => s.id === activeScenario) || SCENARIOS[0];
   const compression = COMPRESSION_DATA[activeScenario] || DEFAULT_COMPRESSION;
+  const [ritualPhase, setRitualPhase] = useState('intake');
+
+  const verdardDelay = (i) => (ritualPhase === 'resolved' ? i * 0.08 : 0);
 
   return (
     <motion.div
@@ -84,34 +88,70 @@ export default function CompressView({ activeScenario }) {
           </CompressCard>
         </div>
 
-        {/* Centre Column */}
+        {/* Centre Column — Compression Ritual */}
         <div className="compress-center">
-          <IntelligenceCore convictionScore={compression.convictionScore} />
+          <CompressionRitual
+            scenarioFactors={scenario.factors}
+            convictionScore={compression.convictionScore}
+            onPhaseChange={setRitualPhase}
+          >
+            {/* Verdict cards revealed after ritual resolves */}
+            <div className="ritual-verdict-stack">
+              <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: verdardDelay(0), duration: 0.35 }}>
+                <CompressCard title="COMPRESSION VERDICT" icon={<Shield size={14} />} delay={0} className="verdict-card">
+                  <div className="verdict-section">
+                    <div className="verdict-label">BOTTOM LINE</div>
+                    <p>{compression.bottomLine}</p>
+                  </div>
+                  <div className="verdict-section">
+                    <div className="verdict-label">ACTION BIAS</div>
+                    <div className={`action-bias bias-${compression.actionBias.toLowerCase().replace(/\s+/g, '-')}`}>
+                      {compression.actionBias}
+                    </div>
+                  </div>
+                </CompressCard>
+              </motion.div>
+
+              <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: verdardDelay(1), duration: 0.35 }}>
+                <CompressCard title="WHAT CHANGED" icon={<RefreshCw size={14} />} delay={0}>
+                  <ul className="verdict-list changed">
+                    {compression.whatChanged.map((c, i) => (
+                      <li key={i}>{c}</li>
+                    ))}
+                  </ul>
+                </CompressCard>
+              </motion.div>
+
+              <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: verdardDelay(2), duration: 0.35 }}>
+                <CompressCard title="BEST EXPRESSIONS" icon={<Zap size={14} />} delay={0}>
+                  <div className="expressions-list">
+                    {compression.bestExpressions.map((e, i) => (
+                      <div key={i} className="expression-row">
+                        <span>{e.name}</span>
+                        <span className={`conviction conviction-${e.conviction.toLowerCase()}`}>
+                          {e.conviction}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </CompressCard>
+              </motion.div>
+
+              <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: verdardDelay(3), duration: 0.35 }}>
+                <CompressCard title="WATCHPOINTS" icon={<AlertTriangle size={14} />} delay={0}>
+                  <ul className="verdict-list watchpoints">
+                    {compression.watchpoints.map((w, i) => (
+                      <li key={i}>{w}</li>
+                    ))}
+                  </ul>
+                </CompressCard>
+              </motion.div>
+            </div>
+          </CompressionRitual>
         </div>
 
         {/* Right Column */}
         <div className="compress-right">
-          <CompressCard title="COMPRESSION VERDICT" icon={<Shield size={14} />} delay={0} className="verdict-card">
-            <div className="verdict-section">
-              <div className="verdict-label">BOTTOM LINE</div>
-              <p>{compression.bottomLine}</p>
-            </div>
-            <div className="verdict-section">
-              <div className="verdict-label">ACTION BIAS</div>
-              <div className={`action-bias bias-${compression.actionBias.toLowerCase().replace(/\s+/g, '-')}`}>
-                {compression.actionBias}
-              </div>
-            </div>
-          </CompressCard>
-
-          <CompressCard title="WHAT CHANGED" icon={<RefreshCw size={14} />} delay={1}>
-            <ul className="verdict-list changed">
-              {compression.whatChanged.map((c, i) => (
-                <li key={i}>{c}</li>
-              ))}
-            </ul>
-          </CompressCard>
-
           <CompressCard title="WHAT CONFIRMS" icon={<TrendingUp size={14} />} delay={2}>
             <ul className="verdict-list confirms">
               {compression.confirms.map((c, i) => (
@@ -124,27 +164,6 @@ export default function CompressView({ activeScenario }) {
             <ul className="verdict-list invalidates">
               {compression.invalidates.map((c, i) => (
                 <li key={i}>{c}</li>
-              ))}
-            </ul>
-          </CompressCard>
-
-          <CompressCard title="BEST EXPRESSIONS" icon={<Zap size={14} />} delay={4}>
-            <div className="expressions-list">
-              {compression.bestExpressions.map((e, i) => (
-                <div key={i} className="expression-row">
-                  <span>{e.name}</span>
-                  <span className={`conviction conviction-${e.conviction.toLowerCase()}`}>
-                    {e.conviction}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </CompressCard>
-
-          <CompressCard title="WATCHPOINTS" icon={<AlertTriangle size={14} />} delay={5}>
-            <ul className="verdict-list watchpoints">
-              {compression.watchpoints.map((w, i) => (
-                <li key={i}>{w}</li>
               ))}
             </ul>
           </CompressCard>

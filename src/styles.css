@@ -1235,3 +1235,191 @@ body {
   background: rgba(56, 189, 248, 0.2);
   border-radius: 3px;
 }
+
+/* ── Compression Ritual ── */
+.ritual-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 0;
+}
+
+.ritual-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 340px;
+}
+
+.compression-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-indicator {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  transition: background 0.3s;
+}
+
+.status-indicator.status-intake {
+  background: var(--teal);
+  box-shadow: 0 0 6px var(--teal-dim);
+  animation: status-pulse 1.2s ease-in-out infinite;
+}
+
+.status-indicator.status-compressing {
+  background: var(--amber);
+  box-shadow: 0 0 8px var(--amber-dim);
+  animation: status-pulse 0.8s ease-in-out infinite;
+}
+
+.status-indicator.status-resolved {
+  background: var(--green);
+  box-shadow: 0 0 6px rgba(34, 197, 94, 0.5);
+}
+
+@keyframes status-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.status-text {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.recompress-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 10px;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.recompress-btn:hover {
+  border-color: var(--teal);
+  color: var(--teal);
+  background: rgba(56, 189, 248, 0.05);
+}
+
+.recompress-btn:active {
+  transform: scale(0.96);
+}
+
+/* Signal Chips */
+.signal-chips-container {
+  min-height: 60px;
+  width: 100%;
+  max-width: 340px;
+}
+
+.signal-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+.signal-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  backdrop-filter: blur(8px);
+}
+
+.signal-chip-label {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.signal-chip-value {
+  font-size: 10px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.signal-chip-value.positive { color: var(--green); }
+.signal-chip-value.negative { color: var(--red); }
+.signal-chip-value.neutral { color: var(--text-muted); }
+
+/* Ritual Core Area */
+.ritual-core-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Core compression states */
+.intel-core.core-compressing .intel-ring {
+  border-color: rgba(245, 158, 11, 0.25);
+}
+
+.intel-core.core-compressing .ring-1 {
+  animation: spin 2s linear infinite, ring-glow-amber 1.8s ease-in-out infinite;
+}
+
+.intel-core.core-compressing .ring-2 {
+  animation: spin-reverse 2.5s linear infinite, ring-glow-amber 1.8s ease-in-out infinite 0.3s;
+}
+
+.intel-core.core-compressing .ring-3 {
+  animation: spin 3s linear infinite, ring-glow-amber 1.8s ease-in-out infinite 0.6s;
+}
+
+.intel-core.core-resolved .intel-ring {
+  border-color: rgba(34, 197, 94, 0.2);
+}
+
+.intel-core.core-resolved .ring-1 {
+  animation: spin 6s linear infinite;
+}
+
+.intel-core.core-resolved .ring-2 {
+  animation: spin-reverse 8s linear infinite;
+}
+
+.intel-core.core-resolved .ring-3 {
+  animation: spin 10s linear infinite;
+}
+
+.intel-orb.orb-compressing {
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.25) 0%, rgba(245, 158, 11, 0.08) 60%, transparent 100%);
+  box-shadow: 0 0 30px rgba(245, 158, 11, 0.2), 0 0 60px rgba(245, 158, 11, 0.08);
+}
+
+@keyframes ring-glow-amber {
+  0%, 100% { border-color: rgba(245, 158, 11, 0.15); }
+  50% { border-color: rgba(245, 158, 11, 0.4); }
+}
+
+/* Verdict stack after ritual */
+.ritual-verdict-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 340px;
+}
