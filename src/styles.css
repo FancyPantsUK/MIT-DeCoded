@@ -2151,3 +2151,213 @@ body {
   padding: 8px 0 2px;
 }
 
+/* ── Compress Mode Toggle ── */
+.compress-mode-toggle {
+  display: flex;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 2px;
+}
+
+.mode-btn {
+  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.mode-btn:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.mode-btn.active {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--amber);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.1);
+}
+
+/* ── Compare View Cards ── */
+.compare-hero-card {
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.compare-header {
+  background: rgba(245, 158, 11, 0.06);
+  border-bottom-color: rgba(245, 158, 11, 0.12);
+  color: var(--amber);
+}
+
+.compare-bias-shift {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 5px;
+  font-size: 10px;
+}
+
+.compare-bias-label {
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+}
+
+.compare-bias-from {
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+.compare-bias-arrow {
+  color: var(--amber);
+  font-size: 12px;
+}
+
+.compare-bias-to {
+  color: var(--amber);
+  font-weight: 700;
+}
+
+.compare-diffs-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.compare-bullish-card .compress-card-header {
+  color: var(--green);
+}
+
+.compare-bearish-card .compress-card-header {
+  color: var(--red);
+}
+
+.compare-none {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-style: italic;
+  margin: 0;
+}
+
+.compare-gap-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.compare-gap-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 0;
+}
+
+.compare-gap-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-dim);
+}
+
+.compare-expr-changes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.compare-expr-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.compare-expr-badge {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+
+.compare-expr-badge.added {
+  background: rgba(34, 197, 94, 0.12);
+  color: var(--green);
+}
+
+.compare-expr-badge.removed {
+  background: rgba(239, 68, 68, 0.12);
+  color: var(--red);
+}
+
+/* ── Factor Compare Mini (Compress left column) ── */
+.factor-compare-mini {
+  display: flex;
+  flex-direction: column;
+}
+
+.factor-compare-header-row {
+  display: grid;
+  grid-template-columns: 1fr 42px 42px 42px;
+  gap: 4px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2px;
+}
+
+.factor-compare-row {
+  display: grid;
+  grid-template-columns: 1fr 42px 42px 42px;
+  gap: 4px;
+  padding: 2px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.factor-compare-row:last-child { border-bottom: none; }
+
+.fcm-col {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.fcm-label {
+  text-align: left;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-dim);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.fcm-val {
+  font-size: 10px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-dim);
+}
+
+.fcm-gap {
+  font-size: 10px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.fcm-gap.positive { color: var(--green); }
+.fcm-gap.negative { color: var(--red); }
+.fcm-gap.neutral { color: var(--text-muted); }
+

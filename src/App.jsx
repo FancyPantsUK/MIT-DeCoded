@@ -22,7 +22,7 @@ function TabContent({ activeTab, scenario, activeScenario, draftUserFactors, app
 
   switch (activeTab) {
     case 'compress':
-      return <CompressView activeScenario={activeScenario} />;
+      return <CompressView activeScenario={activeScenario} appliedUserFactors={appliedUserFactors} />;
     case 'your-view':
       return (
         <YourView
