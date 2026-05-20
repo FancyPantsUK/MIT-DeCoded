@@ -1116,6 +1116,163 @@ body {
   border-radius: 3px;
 }
 
+.heat-total-col,
+.heat-dir-col {
+  font-size: 9px;
+}
+
+.heat-total {
+  font-weight: 800;
+}
+
+.heat-dir {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.heat-dir.bullish { color: var(--green); }
+.heat-dir.positive { color: rgba(34, 197, 94, 0.7); }
+.heat-dir.neutral { color: var(--text-muted); }
+.heat-dir.negative { color: rgba(239, 68, 68, 0.7); }
+.heat-dir.bearish { color: var(--red); }
+
+/* ── Heatmap Compare ── */
+.hm-compare {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hm-gap-strip {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+
+.hm-gap-strip-title {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 8px;
+}
+
+.hm-gap-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.hm-gap-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  min-width: 60px;
+}
+
+.hm-gap-chip.positive {
+  background: rgba(34, 197, 94, 0.06);
+  border-color: rgba(34, 197, 94, 0.15);
+}
+
+.hm-gap-chip.negative {
+  background: rgba(239, 68, 68, 0.06);
+  border-color: rgba(239, 68, 68, 0.15);
+}
+
+.hm-gap-chip.neutral {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.hm-gap-chip-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.hm-gap-chip-value {
+  font-size: 12px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.hm-gap-chip.positive .hm-gap-chip-value { color: var(--green); }
+.hm-gap-chip.negative .hm-gap-chip-value { color: var(--red); }
+.hm-gap-chip.neutral .hm-gap-chip-value { color: var(--text-muted); }
+
+.hm-compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+
+@media (max-width: 900px) {
+  .hm-compare-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hm-compare-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.hm-compare-card-title {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 8px;
+}
+
+.hm-compare-card-title.upgraded { color: var(--green); }
+.hm-compare-card-title.downgraded { color: var(--red); }
+
+.hm-compare-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.hm-compare-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  flex-wrap: wrap;
+}
+
+.hm-compare-item:last-child { border-bottom: none; }
+
+.hm-compare-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text);
+  min-width: 80px;
+}
+
+.hm-compare-cat {
+  font-size: 9px;
+  color: var(--text-muted);
+  flex: 1;
+}
+
 /* ── Seasons View ── */
 .seasons-grid {
   display: flex;

@@ -37,7 +37,7 @@ function TabContent({ activeTab, scenario, activeScenario, draftUserFactors, app
     case 'divergence':
       return <DivergenceView scenario={scenario} appliedUserFactors={appliedUserFactors} />;
     case 'heatmap':
-      return <HeatmapView />;
+      return <HeatmapView scenario={scenario} appliedUserFactors={appliedUserFactors} />;
     case 'seasons':
       return <SeasonsView />;
     case 'rankings':
