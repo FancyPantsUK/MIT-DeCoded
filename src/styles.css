@@ -188,9 +188,134 @@ body {
   border-color: var(--teal);
 }
 
-/* ── Alpha Preview: frosted locked verdict ── */
-.alpha-preview-view {
-  /* inherits compress-view layout */
+/* ── Alpha Compression Lock: full viewport frost ── */
+.alpha-compression-lock-shell {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+.alpha-compression-blur {
+  filter: blur(10px);
+  opacity: 0.62;
+  pointer-events: none;
+  user-select: none;
+  transform: scale(1.015);
+  transform-origin: center top;
+}
+
+.alpha-compression-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  backdrop-filter: blur(12px);
+  background:
+    radial-gradient(ellipse 50% 40% at 50% 45%, rgba(13, 184, 219, 0.1), transparent 70%),
+    rgba(4, 9, 18, 0.42);
+  border: 1px solid rgba(80, 210, 255, 0.12);
+  border-radius: 16px;
+}
+
+/* Lock card */
+.alpha-lock-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 28px 32px 24px;
+  background: rgba(5, 12, 28, 0.82);
+  border: 1px solid rgba(80, 210, 255, 0.15);
+  border-radius: 14px;
+  backdrop-filter: blur(24px);
+  text-align: center;
+  max-width: 320px;
+  box-shadow:
+    0 0 40px rgba(13, 184, 219, 0.06),
+    0 0 80px rgba(13, 184, 219, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.alpha-lock-glow {
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--trace-angle, 0deg),
+    transparent 0%,
+    rgba(13, 184, 219, 0.15) 8%,
+    transparent 16%,
+    transparent 50%,
+    rgba(245, 158, 11, 0.1) 58%,
+    transparent 66%
+  );
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  padding: 1px;
+  animation: trace-spin 6s linear infinite;
+  pointer-events: none;
+}
+
+.alpha-lock-icon {
+  color: var(--amber);
+  filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.3));
+}
+
+.alpha-lock-title {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--amber);
+  text-shadow: 0 0 12px rgba(245, 158, 11, 0.2);
+}
+
+.alpha-lock-desc {
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.5;
+  margin: 0;
+  max-width: 260px;
+}
+
+.alpha-lock-features {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  text-align: left;
+  padding: 8px 0 4px;
+  border-top: 1px solid rgba(80, 210, 255, 0.08);
+}
+
+.alpha-lock-feature {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10.5px;
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+
+.alpha-lock-feature svg {
+  color: rgba(13, 184, 219, 0.5);
+  flex-shrink: 0;
+}
+
+.alpha-lock-cta {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--teal-dim);
+  padding-top: 8px;
+  border-top: 1px solid rgba(56, 189, 248, 0.08);
+  width: 100%;
 }
 
 /* Skeleton content bars */
@@ -214,15 +339,9 @@ body {
   100% { background-position: -200% 0; }
 }
 
-.skeleton-card {
-  opacity: 0.6;
-}
+.skeleton-card { opacity: 0.6; }
+.skeleton-verdict { opacity: 0.5; }
 
-.skeleton-verdict {
-  opacity: 0.5;
-}
-
-/* Skeleton expression tags */
 .tag-skeleton {
   display: inline-block;
   width: 60px;
@@ -235,117 +354,6 @@ body {
 }
 
 .tag-skeleton-sm { width: 45px; }
-
-/* Bottom frost for Alpha */
-.alpha-bottom-frost .bottom-card {
-  opacity: 0.4;
-}
-
-/* ── Frosted glass lock system ── */
-.pro-frost-lock-wrapper {
-  position: relative;
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.frosted-content {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  filter: blur(3px);
-  opacity: 0.5;
-  user-select: none;
-  pointer-events: none;
-}
-
-.pro-frost-lock {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 5;
-}
-
-.pro-frost-lock-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  padding: 20px 24px;
-  background: rgba(5, 12, 24, 0.88);
-  border: 1px solid rgba(245, 158, 11, 0.2);
-  border-radius: 12px;
-  backdrop-filter: blur(16px);
-  text-align: center;
-  max-width: 280px;
-}
-
-.pro-frost-lock-icon {
-  color: var(--amber);
-}
-
-.pro-frost-lock-title {
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: 0.5px;
-  color: var(--amber);
-}
-
-.pro-frost-lock-desc {
-  font-size: 11px;
-  color: var(--text-dim);
-  line-height: 1.4;
-  margin: 0;
-}
-
-.pro-frost-lock-features {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  width: 100%;
-  text-align: left;
-  padding: 0;
-  margin: 0;
-}
-
-.pro-frost-lock-features li {
-  font-size: 10px;
-  color: var(--text-muted);
-  padding-left: 14px;
-  position: relative;
-  line-height: 1.4;
-}
-
-.pro-frost-lock-features li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 5px;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(245, 158, 11, 0.4);
-}
-
-.pro-frost-lock-cta {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--teal-dim);
-  padding-top: 4px;
-  border-top: 1px solid rgba(56, 189, 248, 0.1);
-  width: 100%;
-}
-
-/* Alpha frosted column */
-.alpha-frosted-column {
-  overflow: visible;
-}
 
 /* ── Header ── */
 .header {
