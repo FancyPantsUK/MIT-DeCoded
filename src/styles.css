@@ -263,27 +263,32 @@ body {
 .factor-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 6px;
+  gap: 1px;
+  background: var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
 }
 
 @media (max-width: 900px) {
   .factor-grid {
     grid-template-columns: repeat(4, 1fr);
+    border-radius: 6px;
   }
 }
 
 .factor-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 6px;
+  background: var(--bg-secondary);
+  border: none;
+  border-radius: 0;
   padding: 6px 8px;
   text-align: center;
   backdrop-filter: blur(8px);
-  transition: border-color 0.2s;
+  transition: background 0.2s;
 }
 
 .factor-card:hover {
-  border-color: var(--border-hover);
+  background: var(--bg-card-hover);
 }
 
 .factor-label {
@@ -400,9 +405,11 @@ body {
 
 .compress-center {
   display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding-top: 8px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 0;
+  gap: 0;
 }
 
 /* ── Compress Cards ── */
@@ -1456,3 +1463,241 @@ body {
   color: var(--amber);
   font-variant-numeric: tabular-nums;
 }
+
+.verdict-confidence-unit {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+/* ── Compress Hero Band ── */
+.compress-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, rgba(17, 24, 39, 0.9), rgba(15, 23, 42, 0.7));
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  backdrop-filter: blur(12px);
+}
+
+.compress-hero-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.compress-hero-title {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: var(--teal);
+}
+
+.compress-hero-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.3px;
+}
+
+.compress-hero-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.compress-hero-scenario {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.compress-hero-icon {
+  font-size: 20px;
+}
+
+.compress-hero-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--amber);
+  display: block;
+  line-height: 1.2;
+}
+
+.compress-hero-sublabel {
+  font-size: 10px;
+  color: var(--text-muted);
+  display: block;
+  margin-top: 1px;
+}
+
+.compress-hero-stats {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.compress-hero-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.compress-hero-stat-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.compress-hero-stat-value {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--amber);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.compress-hero-status {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  animation: status-pulse 1.5s ease-in-out infinite;
+}
+
+.compress-hero-status.resolved {
+  color: var(--green);
+  border-color: rgba(34, 197, 94, 0.3);
+  background: rgba(34, 197, 94, 0.08);
+  animation: none;
+}
+
+/* ── Compress Supporting Cards ── */
+.compress-card-supporting {
+  background: rgba(15, 23, 42, 0.5);
+  border-color: rgba(56, 189, 248, 0.08);
+}
+
+.compress-card-supporting .compress-card-header {
+  font-size: 8px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.compress-card-supporting .compress-card-body {
+  font-size: 11px;
+}
+
+/* Compact Season Display */
+.season-display-compact {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.season-icon-sm {
+  font-size: 16px;
+}
+
+.season-name-sm {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--amber);
+}
+
+/* ── Core Connector ── */
+.core-connector {
+  width: 2px;
+  height: 20px;
+  margin: 4px auto;
+  background: rgba(56, 189, 248, 0.1);
+  border-radius: 1px;
+  transition: all 0.4s ease;
+}
+
+.core-connector.active {
+  background: linear-gradient(180deg, var(--teal), var(--amber));
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.3);
+  height: 24px;
+}
+
+/* ── Verdict Hero Card ── */
+.verdict-hero-card {
+  background: rgba(17, 24, 39, 0.9);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 10px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.08), 0 0 40px rgba(245, 158, 11, 0.04);
+  overflow: hidden;
+}
+
+.verdict-hero-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(245, 158, 11, 0.06);
+  border-bottom: 1px solid rgba(245, 158, 11, 0.12);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--amber);
+}
+
+.verdict-hero-body {
+  padding: 12px 14px;
+}
+
+.verdict-bottom-line {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.verdict-meta-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.verdict-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.action-bias-lg {
+  padding: 5px 16px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+}
+
+/* ── Ritual Engine Label ── */
+.ritual-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ritual-engine-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--teal-dim);
+  text-transform: uppercase;
+}
+

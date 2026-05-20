@@ -109,7 +109,10 @@ export default function CompressionRitual({ scenarioFactors, convictionScore, ch
     <div className="ritual-container">
       {/* Header with Recompress */}
       <div className="ritual-header">
-        <CompressionStatus phase={phase} />
+        <div className="ritual-header-left">
+          <div className="ritual-engine-label">DECISION COMPRESSION ENGINE</div>
+          <CompressionStatus phase={phase} />
+        </div>
         <button className="recompress-btn" onClick={handleRecompress} title="Recompress">
           <RotateCcw size={13} />
           <span>Recompress</span>
