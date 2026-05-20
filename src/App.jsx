@@ -43,7 +43,7 @@ function TabContent({ activeTab, scenario, activeScenario, draftUserFactors, app
     case 'rankings':
     case 'performance':
     default:
-      return <DataGridView activeTab={activeTab} />;
+      return <DataGridView activeTab={activeTab} scenario={scenario} appliedUserFactors={appliedUserFactors} />;
   }
 }
 

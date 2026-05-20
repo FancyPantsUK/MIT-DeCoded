@@ -2361,3 +2361,154 @@ body {
 .fcm-gap.negative { color: var(--red); }
 .fcm-gap.neutral { color: var(--text-muted); }
 
+/* ── DataGrid Header ── */
+.dg-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.dg-header-left {
+  flex: 1;
+  min-width: 200px;
+}
+
+.dg-header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.dg-mode-label {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* ── Asset Return (Performance tab) ── */
+.asset-return {
+  font-size: 10px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  min-width: 40px;
+  text-align: right;
+  margin-left: 4px;
+}
+
+.asset-return.positive { color: var(--green); }
+.asset-return.negative { color: var(--red); }
+.asset-return.neutral { color: var(--text-muted); }
+
+.category-drivers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.driver-tag {
+  font-size: 9px;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+
+/* ── DataGrid Compare View ── */
+.dg-compare {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dg-compare-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+@media (max-width: 800px) {
+  .dg-compare-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.dg-compare-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  backdrop-filter: blur(12px);
+}
+
+.dg-compare-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 8px;
+}
+
+.dg-compare-title.upgrades { color: var(--green); }
+.dg-compare-title.downgrades { color: var(--red); }
+
+.dg-compare-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dg-compare-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.dg-compare-item:last-child { border-bottom: none; }
+
+.dg-compare-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text);
+  min-width: 90px;
+}
+
+.dg-compare-cat {
+  font-size: 9px;
+  color: var(--text-muted);
+  flex: 1;
+}
+
+.dg-dir-change {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.dg-dir-arrow {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.dg-dir-change .bullish { color: var(--green); }
+.dg-dir-change .positive { color: rgba(34, 197, 94, 0.7); }
+.dg-dir-change .neutral { color: var(--text-muted); }
+.dg-dir-change .negative { color: rgba(239, 68, 68, 0.7); }
+.dg-dir-change .bearish { color: var(--red); }
+
