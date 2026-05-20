@@ -220,45 +220,38 @@ body {
   border-radius: 16px;
 }
 
-/* Lock card */
+/* Lock card — extends .electric-card .electric-card-amber */
 .alpha-lock-card {
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
   padding: 28px 32px 24px;
   background: rgba(5, 12, 28, 0.82);
-  border: 1px solid rgba(80, 210, 255, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.12);
   border-radius: 14px;
   backdrop-filter: blur(24px);
   text-align: center;
   max-width: 320px;
   box-shadow:
-    0 0 40px rgba(13, 184, 219, 0.06),
+    0 0 40px rgba(245, 158, 11, 0.04),
     0 0 80px rgba(13, 184, 219, 0.03),
     inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
-.alpha-lock-glow {
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  background: conic-gradient(
-    from var(--trace-angle, 0deg),
-    transparent 0%,
-    rgba(13, 184, 219, 0.15) 8%,
-    transparent 16%,
-    transparent 50%,
-    rgba(245, 158, 11, 0.1) 58%,
-    transparent 66%
-  );
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  -webkit-mask-composite: xor;
-  padding: 1px;
-  animation: trace-spin 6s linear infinite;
-  pointer-events: none;
+/* Slower trace spin for the lock card — more restrained */
+.alpha-lock-card.electric-card::before {
+  animation: electric-spin 6s linear infinite;
+}
+
+/* Card content above trace layers */
+.alpha-lock-card > .alpha-lock-icon,
+.alpha-lock-card > .alpha-lock-title,
+.alpha-lock-card > .alpha-lock-desc,
+.alpha-lock-card > .alpha-lock-features,
+.alpha-lock-card > .alpha-lock-cta {
+  position: relative;
+  z-index: 2;
 }
 
 .alpha-lock-icon {
@@ -4139,9 +4132,18 @@ body {
   .electric-card::before,
   .verdict-hero-card::before,
   .compress-hero::before,
-  .rv-badge::after {
+  .rv-badge::after,
+  .alpha-lock-card.electric-card::before {
     animation: none;
     opacity: 0.3;
+  }
+
+  .alpha-compression-blur {
+    filter: blur(6px);
+  }
+
+  .skeleton-line {
+    animation: none;
   }
 
   .mode-btn.active::after,
